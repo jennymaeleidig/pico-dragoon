@@ -8,7 +8,7 @@ function _init()
   init_ui()
   init_gnd_ptn()
   init_player()
-  init_projectile()
+  init_stg()
 
   frame = 0
   horizon = 67
@@ -32,7 +32,7 @@ function _update60()
     end
     update_ui()
     update_player()
-    update_projectile()
+    update_projs()
   end
   frame +=1
 end
@@ -50,9 +50,10 @@ function _draw()
     if scene == "stage1" then
       draw_stage1()
     end
-    draw_projectile()
+    draw_projs()
     draw_ui()
     draw_player()
+
     
   end
 end
@@ -104,82 +105,69 @@ function init_gnd_ptn()
   gnd_ptn_fwd_i = 1
 end
 
-function init_projectile()
-  proj_fired = false
-  proj_ttl = 30
-  proj_pos = {0,0}
-  proj_slope = 1
+function init_stg()
+  projs = {}
 end
 
+
+-- objects -----------------------------
+
+function new_proj()
+  local proj = {}
+  proj.x = plr_pos[1]+16
+  proj.y = plr_pos[2]-3
+  proj.m = slp(xhair_pos, {proj.x, proj.y})
+  proj.d = dst(xhair_pos,{proj.x, proj.y})
+  proj.b = proj.y - (proj.m * proj.x)
+  proj.i = (xhair_pos[1] > proj.x) and 1 or -1
+  proj.ttl = 30
+
+  printh("slp: "..proj.m)
+  printh("b: "..proj.b)
+  printh("dis: "..proj.d)
+  
+  proj.update = function(this)
+    proj.ttl -= 1
+    proj.x = proj.x + proj.i
+    proj.y = proj.m * proj.x + proj.b
+  end
+  
+  proj.draw = function(this)
+    palt(15,true)
+    palt(0,false)
+    if proj.ttl < 30 and proj.ttl > 20 then
+      spr(3,proj.x,proj.y)
+    elseif proj.ttl < 20 and proj.ttl > 5 then
+      spr(4,proj.x+1,proj.y+1)
+    else
+      spr(5,proj.x+2,proj.y+2)
+    end
+    palt()
+  end
+  
+  return proj
+end 
 -- draw / updates ----------------------
 
-function update_projectile()
-  if btnp(5) and not proj_fired then
-    proj_fired = true
-    -- draw starting at head
-    proj_pos = {plr_pos[1]+16,plr_pos[2]-3}
-    proj_slope = slp(xhair_pos, proj_pos)
-    proj_dis = dst(xhair_pos,proj_pos) 
-    proj_intercept = proj_pos[2] - (proj_slope * proj_pos[1])
-    proj_incr = (xhair_pos[1] > proj_pos[1]) and 1 or -1
-    -- proj_slope = abs((xhair_pos[2]-proj_pos[2]) / (xhair_pos[1]-proj_pos[1]))
-    printh("slope: "..proj_slope)
-    printh("dis: "..proj_dis)
-
-  end
-
-  if proj_ttl == 0 then
-    proj_ttl = 30
-    proj_fired = false
-    proj_pos = {0,0}
-    proj_slope = 1
-  end
-
-  if proj_fired then
-    proj_ttl -= 1
-    proj_pos = {proj_pos[1]+proj_incr,proj_slope * proj_pos[1] + proj_intercept}
-    -- if frame % 2 == 0 then
-      -- printh("x: "..proj_slope_x)
-      -- printh("y: "..proj_slope_y)
-      -- if proj_slope_x >= 16 or proj_slope_x <= 1 then
-      --   proj_slope_x = (abs(1-proj_slope_x) >= abs(6-proj_slope_x)) and 5 or 1
-      -- end
-      -- if proj_slope_y >= 16 or proj_slope_y <= 1 then
-      --   proj_slope_y = (abs(1-proj_slope_y) >= abs(6-proj_slope_y)) and 5 or 1
-      -- end
-      -- printh("dis: "..proj_dis)
-      -- printh("slope / distance: "..abs(flr(proj_slope / proj_dis)))
-      -- proj_pos = {proj_pos[1]+1,proj_pos[2] - abs(flr(proj_slope / proj_dis))}
-      -- printh("pos after update: "..tostr(proj_pos[1])..", "..tostr(proj_pos[2]))
-    -- printh("dis: "..proj_dis)
-    -- proj_incr = proj_dis/45
-    -- proj_x = proj_left and proj_pos[1]*(0.99) or proj_pos[1]*(1.01)
-    -- proj_pos = {proj_pos[1]+proj_incr,proj_pos[1] * abs(proj_slope)}
-    -- printh("curr: "..tostr(proj_pos[1])..", "..tostr(proj_pos[2]))
-
-    -- end
-
-
-  end
-
-end
-
-function draw_projectile()
-  palt(15,true)
-  palt(0,false)
-  if proj_fired then
-    if proj_ttl < 30 and proj_ttl > 20 then
-      spr(3,proj_pos[1],proj_pos[2])
-    elseif proj_ttl < 20 and proj_ttl > 5 then
-      spr(4,proj_pos[1]+1,proj_pos[2]+1)
-    else
-      spr(5,proj_pos[1]+2,proj_pos[2]+2)
+function update_projs()
+  for obj in all(projs) do
+    obj.update(obj)
+    if obj.ttl < 0 then
+      del(projs, obj)
     end
   end
-  palt()
+end
+
+function draw_projs()
+  for obj in all(projs) do 
+    obj.draw(obj)
+  end
 end
 
 function update_player()
+  if btnp(5) then
+    add(projs, new_proj())
+  end
   if btn(0) then
     plr_pos[1] = (plr_pos[1] <= plr_bnds[1][1]) and plr_bnds[1][1] or plr_pos[1] - plr_spd
   end
