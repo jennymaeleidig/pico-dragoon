@@ -116,25 +116,52 @@ end
 function update_projectile()
   if btnp(5) and not proj_fired then
     proj_fired = true
+    -- draw starting at head
     proj_pos = {plr_pos[1]+16,plr_pos[2]-3}
-    proj_slope_y = abs(xhair_pos[2]-proj_pos[2])
-    proj_slope_x = xhair_pos[1]-proj_pos[1]
-    printh(proj_slope_x)
-    printh(tostr(proj_pos[1])..", "..tostr(proj_pos[2]))
+    proj_slope = slp(xhair_pos, proj_pos)
+    proj_dis = dst(xhair_pos,proj_pos) 
+    proj_intercept = proj_pos[2] - (proj_slope * proj_pos[1])
+    proj_incr = (xhair_pos[1] > proj_pos[1]) and 1 or -1
+    -- proj_slope = abs((xhair_pos[2]-proj_pos[2]) / (xhair_pos[1]-proj_pos[1]))
+    printh("slope: "..proj_slope)
+    printh("dis: "..proj_dis)
+
   end
-  if proj_fired then
-    proj_ttl -= 1
-    if frame % 3 == 0 then
-      proj_pos = {proj_pos[1]+proj_slope_x,proj_pos[2]-proj_slope_y}
-      printh(tostr(proj_pos[1])..", "..tostr(proj_pos[2]))
-    end
-  end
+
   if proj_ttl == 0 then
     proj_ttl = 30
     proj_fired = false
     proj_pos = {0,0}
     proj_slope = 1
   end
+
+  if proj_fired then
+    proj_ttl -= 1
+    proj_pos = {proj_pos[1]+proj_incr,proj_slope * proj_pos[1] + proj_intercept}
+    -- if frame % 2 == 0 then
+      -- printh("x: "..proj_slope_x)
+      -- printh("y: "..proj_slope_y)
+      -- if proj_slope_x >= 16 or proj_slope_x <= 1 then
+      --   proj_slope_x = (abs(1-proj_slope_x) >= abs(6-proj_slope_x)) and 5 or 1
+      -- end
+      -- if proj_slope_y >= 16 or proj_slope_y <= 1 then
+      --   proj_slope_y = (abs(1-proj_slope_y) >= abs(6-proj_slope_y)) and 5 or 1
+      -- end
+      -- printh("dis: "..proj_dis)
+      -- printh("slope / distance: "..abs(flr(proj_slope / proj_dis)))
+      -- proj_pos = {proj_pos[1]+1,proj_pos[2] - abs(flr(proj_slope / proj_dis))}
+      -- printh("pos after update: "..tostr(proj_pos[1])..", "..tostr(proj_pos[2]))
+    -- printh("dis: "..proj_dis)
+    -- proj_incr = proj_dis/45
+    -- proj_x = proj_left and proj_pos[1]*(0.99) or proj_pos[1]*(1.01)
+    -- proj_pos = {proj_pos[1]+proj_incr,proj_pos[1] * abs(proj_slope)}
+    -- printh("curr: "..tostr(proj_pos[1])..", "..tostr(proj_pos[2]))
+
+    -- end
+
+
+  end
+
 end
 
 function draw_projectile()
@@ -331,6 +358,15 @@ function draw_main_menu()
 end
 
 -- helper functions ------------------
+function slp(o1,o2)
+  return (o2[2]-o1[2]) / (o2[1]-o1[1])
+end
+
+function dst(o1,o2)
+  return sqrt(sqr(o1[1]-o2[1])+sqr(o1[2]-o2[2]))
+end
+
+function sqr(x) return x*x end
 
 -- shallow copy ----------------------
 function shallowcopy(orig)
