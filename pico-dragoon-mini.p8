@@ -2,6 +2,8 @@ pico-8 cartridge // http://www.pico-8.com
 version 42
 __lua__
 
+#include vectors.lua
+
 function _init()
   init_assets()
   init_menu()
@@ -114,12 +116,11 @@ end
 
 function new_proj()
   local proj = {}
-  proj.x = plr_pos[1]+16
-  proj.y = plr_pos[2]-3
-  proj.m = slp(xhair_pos, {proj.x, proj.y})
-  proj.d = dst(xhair_pos,{proj.x, proj.y})
-  proj.b = proj.y - (proj.m * proj.x)
-  proj.i = (xhair_pos[1] > proj.x) and 1 or -1
+  proj.v = v_new(plr_pos[1]+16, plr_pos[2])
+  proj.m = slp(xhair_pos, {proj.v.x, proj.v.y})
+  proj.d = dst(xhair_pos,{proj.v.x, proj.v.y})
+  proj.b = proj.v.y - (proj.m * proj.v.x)
+  proj.i = (xhair_pos[1] > proj.v.x) and 1 or -1
   proj.ttl = 30
 
   printh("slp: "..proj.m)
@@ -128,19 +129,19 @@ function new_proj()
   
   proj.update = function(this)
     proj.ttl -= 1
-    proj.x = proj.x + proj.i
-    proj.y = proj.m * proj.x + proj.b
+    proj.v.x = (proj.v.x + proj.i)
+    proj.v.y = (proj.m * proj.v.x + proj.b)
   end
   
   proj.draw = function(this)
     palt(15,true)
     palt(0,false)
-    if proj.ttl < 30 and proj.ttl > 20 then
-      spr(3,proj.x,proj.y)
-    elseif proj.ttl < 20 and proj.ttl > 5 then
-      spr(4,proj.x+1,proj.y+1)
+    if proj.ttl < 30 and proj.ttl > 24 then
+      spr(3,proj.v.x,proj.v.y)
+    elseif proj.ttl < 24 and proj.ttl > 10 then
+      spr(4,proj.v.x+1,proj.v.y+1)
     else
-      spr(5,proj.x+2,proj.y+2)
+      spr(5,proj.v.x+2,proj.v.y+2)
     end
     palt()
   end
