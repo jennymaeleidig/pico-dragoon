@@ -60,3 +60,15 @@ function v_reflect( v, n )
   local refv = v_subv( v, wdnv )
   return refv
 end
+
+function v_trans(v, x, y)
+  return {x = v.x + x, y = v.y + y}
+end
+
+function v_flipx(v)
+  return {x = v.x, y = -v.y}
+end
+
+function v_flipy(v)
+  return {x = -v.x, y = v.y}
+end
