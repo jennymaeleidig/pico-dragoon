@@ -10,19 +10,23 @@ function new_player()
   
     plr.update = function(this)
       if btnp(5) then
-        add(projs, new_proj())
-      end
+        fire_proj()
+      elseif btn(5) then
+        loc_cnt += 1
+      else
+        loc_cnt = 0
+      end 
       if btn(0) then
-        plr.v = v_addv(plr.v, v_new(-1,0))
+        plr.v = v_addv(plr.v, v_new(-plr.spd,0))
       end
       if btn(1) then
-        plr.v = v_addv(plr.v, v_new(1,0))
+        plr.v = v_addv(plr.v, v_new(plr.spd,0))
       end
       if btn(2) then
-        plr.v = v_addv(plr.v, v_new(0,-1))
+        plr.v = v_addv(plr.v, v_new(0,-plr.spd))
       end
       if btn(3) then
-        plr.v = v_addv(plr.v, v_new(0,1))
+        plr.v = v_addv(plr.v, v_new(0,plr.spd))
       end
       plr.pos = bound_obj(v_addv(plr.pos, plr.v), plr.bnds)
       plr.v = v_new(0,0)
@@ -40,5 +44,11 @@ function new_player()
   end
   
 function init_player()
+  loc_tim = 20
+  loc_cnt = 0
   plr = new_player()
+end
+
+function fire_proj()
+  add(projs, new_proj())
 end

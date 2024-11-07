@@ -21,7 +21,7 @@ function draw_stage()
 end
 
 function init_stage()
-    init_proj()
+    init_projs()
     init_ui()
     gnd_ptn_fwd = {{{1,3},{10,17},{28,47},{64,64}},
         {{3,5},{13,20},{38,60},{64,64}},

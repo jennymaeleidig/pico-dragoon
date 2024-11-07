@@ -43,6 +43,6 @@ function draw_projs()
   end
 end
 
-function init_proj()
+function init_projs()
   projs = {}
 end

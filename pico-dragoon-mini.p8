@@ -19,6 +19,7 @@ __lua__
 #include ./lifecycles/stages/stage_1.lua
 
 function _init()
+  poke(0x5f5c,255)
   init_char_select()
   init_player()
   init_stage()
