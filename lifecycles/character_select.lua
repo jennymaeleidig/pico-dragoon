@@ -81,4 +81,5 @@ function init_char_select()
     loaded_red = false
     loaded_black = false
     loaded_main = false
+    drag_scenes = {"blue_drag", "black_drag", "red_drag"}
 end

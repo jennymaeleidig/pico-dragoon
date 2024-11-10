@@ -31,3 +31,12 @@ function bound_obj(pos, bnds)
   pos.y = (pos.y >= bnds[2][2]) and bnds[2][2] or pos.y
   return pos  
 end
+
+function is_in(itm, tbl)
+  for i in all(tbl) do 
+    if itm == i then
+      return true
+    end
+  end
+  return false
+end

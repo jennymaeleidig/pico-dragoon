@@ -28,16 +28,25 @@ function _init()
 end
  
 function _update60()
-  update_main_menu()
-  update_char_select()
-  update_stage()
+
+  if scene == "main_menu" then
+    update_main_menu()
+  elseif is_in(scene, drag_scenes) then
+    update_char_select()
+  elseif scene == "stage1" then
+    update_stage()
+  end
   frame +=1
 end
  
 function _draw()
-  draw_main_menu()
-  draw_char_select()
-  draw_stage()
+  if scene == "main_menu" then
+    draw_main_menu()
+  elseif is_in(scene, drag_scenes) then
+    draw_char_select()
+  elseif scene == "stage1" then
+    draw_stage()
+  end
 end
 
 __gfx__
