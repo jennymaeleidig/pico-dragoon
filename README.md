@@ -1,6 +1,6 @@
 # Pico Dragoon Mini (Work In Progress)
 
-My interpretation of Panzer Dragoon Mini for the Sega Game Gear implemented in pico-8.
+My interpretation of [Panzer Dragoon Mini](https://www.youtube.com/watch?v=7rkUTJOvT_U) for the Sega Game Gear implemented in pico-8.
 
 Panzer Dragoon Mini was never released in the United States. In order to bring this game to a larger audience, I am working to port the game to the pico8 ecosystem to allow for broader access.
 
