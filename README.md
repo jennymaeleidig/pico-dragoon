@@ -1,4 +1,4 @@
-# WIP - Pico Dragoon Mini
+# Pico Dragoon Mini (Work In Progress)
 
 My interpretation of Panzer Dragoon Mini for the Sega Game Gear implemented in pico-8.
 
@@ -23,6 +23,7 @@ Hosts system lifescycle functions (`init()`, `update60()`, `draw()`).
 ### Objects
 
 Each object follows a general stucture of having the following lifecycle functions:
+
 ```lua
 function new_obj()
   local obj = {}
@@ -42,6 +43,9 @@ end
 
 ### Assets
 
+Static asset files as described in the `Utils` section, `string_assets` subsection above.
+
 ### Lifecycles
 
+Hosts the individual "rooms" of the game.
 
