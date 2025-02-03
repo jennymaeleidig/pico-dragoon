@@ -19,7 +19,7 @@ Hosts system lifescycle functions (`init()`, `update60()`, `draw()`).
 
 * `drawing` - Hosts custom drawing functions for shapes outside of standard library.
 * `helpers` - Hosts custom math functions as well as other utilies.
-* `string_ssets` - Hosts functions to draw larger assets. See this [post](https://www.lexaloffle.com/bbs/?tid=38884) for further detail.
+* `string_assets` - Hosts functions to draw larger assets. See this [post](https://www.lexaloffle.com/bbs/?tid=38884) for further detail.
 * `vectors` - Simple vector math library. Currently uses [this](https://github.com/clowerweb/Lib-Pico8/blob/master/vectors.lua) implementation. For more complex calculations, [this]() library could be useful.
 
 ### Objects
